@@ -1,10 +1,12 @@
 
 const input = document.querySelector('#csv_file');
-console.log(input);
-let csvArray = [];
+let csvArray
+let test = false;
 
 input.addEventListener('change', function (e) {
     const reader = new FileReader();
+
+
     reader.readAsText(input.files[0]);
 
     reader.onload = function () {
@@ -12,10 +14,24 @@ input.addEventListener('change', function (e) {
         commaSeparated = commaSeparated.replace(/;/g, ",");
         commaSeparated = commaSeparated.replace(/\r\n/g, ",");
         let csvDataArray = commaSeparated.split(",");
-        csvArray = [...csvDataArray]
-        console.log(csvArray);
+        csvArray = csvDataArray;
+        
+        dataResponse(csvArray);
     }
+
+
 }, false)
 
+function dataResponse (data){
+    console.log(JSON.stringify(data));
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    };
+    fetch('/api', options);
+}
 
 
